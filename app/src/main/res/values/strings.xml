@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Restavracije v Mariboru</string>
+    <string name="register_login_blank_input">Vpišite email in geslo!</string>
+    <string name="login_user_not_found">Uporabnik s takšnim email naslovom ne obstaja!</string>
+    <string name="register_login_wrong_email_password">Vpisali ste napačen email ali geslo!</string>
+    <string name="register_weak_pw">Uporabiti morate močnejše geslo!</string>
+    <string name="register_login_email_exists">Račun s takšnim email naslovom že obstaja!</string>
+    <string name="check_internet_login">Preverite internetno povezavo!</string>
+    <string name="sign_in_failed">Prijava je bila neuspešna!</string>
+    <string name="google_client_id">12361456003-m28l6qs04do13u66eim5dkloivs1t5mq.apps.googleusercontent.com</string>
+    <string name="splash_screen_icon">Splash_screen_icon</string>
+    <string name="feri">Feri</string>
+    <string name="login">Prijava</string>
+    <string name="za_uporabo_aplikacije_se_mora_prijaviti">Za uporabo aplikacije se moraš prijaviti.</string>
+    <string name="prijave_se">Prijave se</string>
+    <string name="nav_odjava">Odjava</string>
+    <string name="nav_profil">Profil</string>
+    <string name="nav_ocene">Ocene</string>
+    <string name="nav_komentarji">Komentarji</string>
+    <string name="nav_priljubljene_restavracije">Priljubljene restavracije</string>
+    <string name="nav_domov">Domov</string>
+    <string name="nav_ime_in_priimek">Ime in priimek</string>
+    <string name="nav_email">Email uporabnika</string>
+    <string name="favorite_no_fill">favorite_no_fill</string>
+    <string name="favorite_fill">favorite_fill</string>
+    <string name="naziv_restavracije">Naziv restavracije</string>
+    <string name="naslov_restavracije">Naslov restavracije</string>
+    <string name="restaurant_image">restaurant_image</string>
+    <string name="search_restaurant">Poišči restavracijo</string>
+    <string name="ni_rezultata">Ni rezultata</string>
+    <string name="no_result_img">no_result_img</string>
+</resources>

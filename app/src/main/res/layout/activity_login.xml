@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".SplashScreenActivity"
+        android:background="@color/colorWhite">
+
+    <TextView
+            android:id="@+id/login_feri"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/feri"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:textAllCaps="true"
+            android:fontFamily="@font/montserrat_extra_bold"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/activity_vertical_margin_16"/>
+
+    <ImageView
+            android:id="@+id/restaurants_splash_screen"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_fork"
+            android:contentDescription="@string/splash_screen_icon"
+            android:layout_above="@+id/login_prijava_text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"/>
+
+    <TextView
+            android:id="@+id/login_prijava_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/login_description"
+            android:layout_centerHorizontal="true"
+            android:text="@string/login"
+            android:textSize="28sp"
+            android:textColor="@color/colorPrimary"
+            android:fontFamily="@font/merriweather_bold_italic"
+            android:layout_marginBottom="8dp"/>
+
+    <TextView
+            android:id="@+id/login_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/button_google_sign_in"
+            android:layout_centerHorizontal="true"
+            android:text="@string/za_uporabo_aplikacije_se_mora_prijaviti"
+            android:textSize="13sp"
+            android:textColor="@color/colorBlack"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_48"/>
+
+    <Button
+            android:id="@+id/button_google_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="@string/prijave_se"
+            android:textSize="15sp"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/colorBlack"
+            android:drawableStart="@drawable/ic_google"
+            android:background="@drawable/button_google_login"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_64"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin_64"/>
+
+</RelativeLayout>
+
