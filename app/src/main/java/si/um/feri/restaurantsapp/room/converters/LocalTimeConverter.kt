@@ -7,7 +7,6 @@ import java.time.LocalTime
 
 class LocalTimeConverter {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     @TypeConverter
     fun fromStringToLocalTime(value: String?): LocalTime? {
         return LocalTime.parse(value)

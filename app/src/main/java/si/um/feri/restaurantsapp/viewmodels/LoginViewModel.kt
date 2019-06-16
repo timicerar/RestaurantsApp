@@ -35,7 +35,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application), 
 
     private val restaurantsRepository = RestaurantsRepository(application)
 
-
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestIdToken(application.getString(R.string.google_client_id))

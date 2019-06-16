@@ -15,7 +15,6 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.rv_restaurant_item.view.*
 import si.um.feri.restaurantsapp.R
 import si.um.feri.restaurantsapp.fragments.RestaurantFragment
-import si.um.feri.restaurantsapp.room.models.Favorite
 import si.um.feri.restaurantsapp.room.models.Restaurant
 
 private const val RESTAURANT_FRAGMENT = "RESTAURANT_FRAGMENT"
@@ -41,8 +40,15 @@ class RestaurantsAdapter(private val context: Context) :
         holder.restaurantName.text = tempRestaurant.name
         holder.restaurantAddress.text = tempRestaurant.address
         holder.restaurantRating.rating = tempRestaurant.currentRating!!.toFloat()
-        holder.restaurantFavNoFill.visibility = View.VISIBLE
-        holder.restaurantFavFill.visibility = View.INVISIBLE
+
+        if (tempRestaurant.isFavorite) {
+            holder.restaurantFavNoFill.visibility = View.INVISIBLE
+            holder.restaurantFavFill.visibility = View.VISIBLE
+        } else {
+            holder.restaurantFavNoFill.visibility = View.VISIBLE
+            holder.restaurantFavFill.visibility = View.INVISIBLE
+        }
+
         setImage(tempRestaurant.photoUrl, holder)
 
         holder.itemView.setOnClickListener {
@@ -78,13 +84,13 @@ class RestaurantsAdapter(private val context: Context) :
         val bundle = Bundle()
         bundle.putInt("restaurantId", restaurantId)
 
-        val restaurantFrament = RestaurantFragment.newInstance()
-        restaurantFrament.arguments = bundle
+        val restaurantFragment = RestaurantFragment.newInstance()
+        restaurantFragment.arguments = bundle
 
         val fragmentManager = (context as AppCompatActivity).supportFragmentManager
         fragmentManager
             .beginTransaction()
-            .replace(R.id.content_frame, restaurantFrament, RESTAURANT_FRAGMENT)
+            .replace(R.id.content_frame, restaurantFragment, RESTAURANT_FRAGMENT)
             .apply { if (canGoBack) addToBackStack(null) }
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             .commit()

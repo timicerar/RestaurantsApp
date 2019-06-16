@@ -2,7 +2,10 @@ package si.um.feri.restaurantsapp.room.models
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity
 data class Restaurant(
     @PrimaryKey
@@ -13,7 +16,7 @@ data class Restaurant(
     val address: String?,
     val latitude: Double?,
     val longitude: Double?,
-    val currentRating: Double?,
+    var currentRating: Double?,
     val type: String?,
     var isFavorite: Boolean = false
-)
+) : Parcelable

@@ -1,7 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             android:layout_width="match_parent"
-                                             android:layout_height="match_parent"
-android:background="#0074D9">
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.v7.widget.Toolbar
+            android:id="@+id/main_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize">
+
+        <EditText
+                android:id="@+id/editTextSearchFavorites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_restaurant"
+                android:drawableStart="@drawable/ic_search_orange_24dp"
+                android:drawablePadding="5dp"
+                android:inputType="text"
+                android:fontFamily="@font/montserrat_medium"
+                android:layout_marginStart="@dimen/activity_horizontal_margin_16"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin_16"
+                tools:ignore="Autofill"/>
+
+    </android.support.v7.widget.Toolbar>
+
+    <View
+            android:id="@+id/restaurantsHorizontalLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/main_toolbar"
+            android:background="@color/colorGray"/>
+
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/restaurant_recycle_view"
+            tools:listitem="@layout/rv_restaurant_item"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/restaurantsHorizontalLine"
+            android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
+    <ImageView
+            android:id="@+id/noFavorites"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_above="@+id/noFavoritesText"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"
+            android:src="@drawable/ic_favorite_red_no_fill_24dp"
+            android:contentDescription="@string/no_result_img"/>
+
+    <TextView
+            android:id="@+id/noFavoritesText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            android:text="@string/no_favorites"
+            android:gravity="center"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_16"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin_16"
+            android:textSize="15sp"
+            android:textColor="@color/colorGray"
+            android:fontFamily="@font/montserrat_medium"/>
+
+    <ImageView
+            android:id="@+id/noResultIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_above="@+id/noResult"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"
+            android:src="@drawable/ic_search_orange_24dp"
+            android:contentDescription="@string/no_result_img"/>
+
+    <TextView
+            android:id="@+id/noResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            android:gravity="center"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_16"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin_16"
+            android:text="@string/ni_rezultata"
+            android:textSize="15sp"
+            android:textColor="@color/colorGray"
+            android:fontFamily="@font/montserrat_medium"/>
+
+</RelativeLayout>
+

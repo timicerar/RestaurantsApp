@@ -1,9 +1,6 @@
 package si.um.feri.restaurantsapp.room.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import si.um.feri.restaurantsapp.room.models.Restaurant
 
 @Dao
@@ -19,5 +16,8 @@ interface RestaurantDao {
     fun getAllRestaurantsAscByName(): List<Restaurant>
 
     @Query("SELECT * FROM Restaurant WHERE restaurantId = :restaurantId")
-    fun getRestaurantByRestaurantId(restaurantId: Long): Restaurant
+    fun getRestaurantByRestaurantId(restaurantId: Int): Restaurant
+
+    @Update
+    fun updateRestaurant(restaurant: Restaurant)
 }

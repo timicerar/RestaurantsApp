@@ -15,8 +15,7 @@
     <string name="prijave_se">Prijave se</string>
     <string name="nav_odjava">Odjava</string>
     <string name="nav_profil">Profil</string>
-    <string name="nav_ocene">Ocene</string>
-    <string name="nav_komentarji">Komentarji</string>
+    <string name="nav_komentarji_ocene">Mnenja o restavracijah</string>
     <string name="nav_priljubljene_restavracije">Priljubljene restavracije</string>
     <string name="nav_domov">Domov</string>
     <string name="nav_ime_in_priimek">Ime in priimek</string>
@@ -29,4 +28,27 @@
     <string name="search_restaurant">Poišči restavracijo</string>
     <string name="ni_rezultata">Ni rezultata</string>
     <string name="no_result_img">no_result_img</string>
+    <string name="no_internet">no-internet</string>
+    <string name="no_internet_error_msg">Ups prišlo je do napake.</string>
+    <string name="no_internet_error_description">Preverite internetno povezavo in podrsajte navzdol po zaslonu.</string>
+    <string name="restaurant_name">Ime restavracije</string>
+    <string name="restaurantRatingNum">4.7</string>
+    <string name="restaurant_location">Restaurant location</string>
+    <string name="restaurant_description">Restaurant description</string>
+    <string name="dialog_restaurant_name">Delovnik restavracije</string>
+    <string name="comment_text">Testni komentar osebe, ki je ocenila restavracijo</string>
+    <string name="comment_user">Timotej Cerar</string>
+    <string name="restaurant_opinion">Podaj svoje mnenje</string>
+    <string name="comment_date">29.10.2019 18:30:31</string>
+    <string name="restaurant_edit_text_opinion">Napišite svoje mnenje</string>
+    <string name="button_opinion">Dodaj mnenje</string>
+    <string name="restaurant_pick_rating">Izberite oceno restavracije</string>
+    <string name="no_favorites">Trenutno nimate nobene priljubljene restavracije</string>
+    <string name="opinion_search">Poišči mnenja po imenu restavracije</string>
+    <string name="opinion_text">Trenutno se nimate podanega nobenega mnenja</string>
+    <string-array name="commentOptions">
+        <item>Uredi</item>
+        <item>Izbriši</item>
+    </string-array>
+    <string name="title_activity_maps">Map</string>
 </resources>

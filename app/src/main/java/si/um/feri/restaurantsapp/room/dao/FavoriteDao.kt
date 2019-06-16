@@ -7,13 +7,13 @@ import si.um.feri.restaurantsapp.room.models.Favorite
 interface FavoriteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertFavoriteRestaurant(favorite: Favorite)
+    fun insertFavoriteRestaurant(favorite: Favorite?)
 
     @Delete
     fun deleteFavoriteRestaurant(favorite: Favorite)
 
     @Query("SELECT * FROM Favorite WHERE userGoogleId = :userGoogleId AND restaurantId = :restaurantId")
-    fun getFavoriteByUserGoogleIdAndRestaurantId(userGoogleId: String, restaurantId: Long): Favorite
+    fun getFavoriteByUserGoogleIdAndRestaurantId(userGoogleId: String, restaurantId: Int): Favorite
 
     @Query("SELECT * FROM Favorite WHERE userGoogleId = :userGoogleId")
     fun getFavoritesByUserGoogleId(userGoogleId: String): List<Favorite>

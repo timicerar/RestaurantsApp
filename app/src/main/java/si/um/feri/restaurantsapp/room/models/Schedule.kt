@@ -4,8 +4,11 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.PrimaryKey
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.time.LocalTime
 
+@Parcelize
 @Entity(
     foreignKeys = [ForeignKey(
         entity = Restaurant::class,
@@ -29,4 +32,4 @@ data class Schedule(
     val fkRestaurantId: Int?,
     @ColumnInfo(index = true)
     val fkDayId: Int?
-)
+) : Parcelable

@@ -23,14 +23,17 @@ interface RestaurantsAPI {
     RATINGS
      */
     @GET("rating/restaurant/{idRestaurant}")
-    fun getRatingsByRestaurantIdAsync(@Path("idRestaurant") idRestaurant: Long): Deferred<Response<List<RatingJacksonModel>>>
+    fun getRatingsByRestaurantIdAsync(@Path("idRestaurant") idRestaurant: Int): Deferred<Response<List<RatingJacksonModel>>>
 
     @GET("rating/user/googleId/{googleUserId}")
     fun getRatingsByUserGoogleIdAsync(@Path("googleUserId") googleUserId: String): Deferred<Response<List<RatingJacksonModel>>>
 
+    @GET("rating/user/googleId/{googleUserId}/restaurant/{restaurantId}")
+    fun getRatingsByUserGoogleIdAndRestaurantIdRestaurant(@Path("googleUserId") googleUserId: String, @Path("restaurantId") restaurantId: Int): Deferred<Response<List<RatingJacksonModel>>>
+
     @GET("rating/restaurant/{idRestaurant}/user/googleId/{userGoogleId}")
     fun checkIfUserAlreadyRatedTheRestaurantAsync(
-        @Path("idRestaurant") idRestaurant: Long,
+        @Path("idRestaurant") idRestaurant: Int,
         @Path("userGoogleId") userGoogleId: String
     ): Deferred<Response<RatingJacksonModel>>
 
@@ -41,7 +44,7 @@ interface RestaurantsAPI {
     COMMENTS
      */
     @GET("comment/restaurant/{idRestaurant}")
-    fun getCommentsByRestaurantIdAsync(@Path("idRestaurant") idRestaurant: Long): Deferred<Response<List<CommentJacksonModel>>>
+    fun getCommentsByRestaurantIdAsync(@Path("idRestaurant") idRestaurant: Int): Deferred<Response<List<CommentJacksonModel>>>
 
     @GET("comment/user/googleId/{googleUserId}")
     fun getCommentsByUserGoogleIdAsync(@Path("googleUserId") googleUserId: String): Deferred<Response<List<CommentJacksonModel>>>
@@ -52,11 +55,11 @@ interface RestaurantsAPI {
     @PUT("comment/update/{idComment}")
     fun updateCommentAsync(
         @Body commentJacksonModel: CommentJacksonModel,
-        @Path("idComment") idComment: Long
+        @Path("idComment") idComment: Int
     ): Deferred<Response<CommentJacksonModel>>
 
     @DELETE("comment/delete/{idComment}")
-    fun deleteCommentAsync(@Path("idComment") idComment: Long): Deferred<Response<Boolean>>
+    fun deleteCommentAsync(@Path("idComment") idComment: Int?): Deferred<Response<Boolean>>
 
     /**
     USER
@@ -74,6 +77,6 @@ interface RestaurantsAPI {
     fun insertUserAsync(@Body userJacksonModel: UserJacksonModel): Deferred<Response<UserJacksonModel>>
 
     @PUT("user/update/{idUser}")
-    fun updateUserAsync(@Body userJacksonModel: UserJacksonModel, @Path("idUser") idUser: Long): Deferred<Response<UserJacksonModel>>
+    fun updateUserAsync(@Body userJacksonModel: UserJacksonModel, @Path("idUser") idUser: Int): Deferred<Response<UserJacksonModel>>
 
 }

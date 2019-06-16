@@ -14,5 +14,5 @@ interface ScheduleDao {
     fun insertSchedule(schedule: Schedule)
 
     @Query("SELECT * FROM Schedule WHERE fkRestaurantId = :fkRestaurantId")
-    fun getSchedulesByRestaurantId(fkRestaurantId: Long): List<Schedule>
+    fun getSchedulesByRestaurantId(fkRestaurantId: Int): List<Schedule>
 }

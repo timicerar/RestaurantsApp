@@ -19,10 +19,8 @@ import si.um.feri.restaurantsapp.viewmodels.RestaurantViewModel
 private const val ACTIVITY = "activity"
 private const val LOGIN_ACTIVITY = -1
 private const val HOME_FRAGMENT = "HOME_FRAGMENT"
-private const val COMMENTS_FRAGMENT = "COMMENTS_FRAGMENT"
+private const val COMMENTS_RATING_FRAGMENT = "COMMENTS_RATING_FRAGMENT"
 private const val FAVORITES_FRAGMENT = "FAVORITES_FRAGMENT"
-private const val RATINGS_FRAGMENT = "RATINGS_FRAGMENT"
-private const val USER_PROFILE = "USER_PROFILE"
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN and WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         restaurantViewModel = ViewModelProviders.of(this).get(RestaurantViewModel::class.java)
@@ -102,9 +100,7 @@ class MainActivity : AppCompatActivity() {
         when (menuItem.itemId) {
             R.id.nav_home -> openFragment(HomeFragment.newInstance(), HOME_FRAGMENT)
             R.id.nav_favorites -> openFragment(FavoritesFragment.newInstance(), FAVORITES_FRAGMENT)
-            R.id.nav_comments -> openFragment(CommentsFragment.newInstance(), COMMENTS_FRAGMENT)
-            R.id.nav_ratings -> openFragment(RatingsFragment.newInstance(), RATINGS_FRAGMENT)
-            R.id.nav_profile -> openFragment(UserProfileFragment.newInstance(), USER_PROFILE)
+            R.id.nav_comments -> openFragment(OpinionsFragment.newInstance(), COMMENTS_RATING_FRAGMENT)
             R.id.nav_logout -> {
                 loginViewModel.signOut()
                 openLoginScreen()

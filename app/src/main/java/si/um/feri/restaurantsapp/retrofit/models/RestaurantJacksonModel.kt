@@ -1,8 +1,10 @@
 package si.um.feri.restaurantsapp.retrofit.models
 
+import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import kotlinx.android.parcel.Parcelize
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder(
@@ -16,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder
     "currentRating",
     "type"
 )
+@Parcelize
 data class RestaurantJacksonModel(
     @JsonProperty("idRestaurant")
     val idRestaurant: Int?,
@@ -35,4 +38,4 @@ data class RestaurantJacksonModel(
     val currentRating: Double?,
     @JsonProperty("type")
     val type: String?
-)
+): Parcelable

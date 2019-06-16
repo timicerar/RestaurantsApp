@@ -13,6 +13,9 @@ import si.um.feri.restaurantsapp.room.models.Day
 import si.um.feri.restaurantsapp.room.models.Favorite
 import si.um.feri.restaurantsapp.room.models.Restaurant
 import si.um.feri.restaurantsapp.room.models.Schedule
+import java.lang.Exception
+import java.net.ConnectException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 private const val NO_INTERNET_CONNECTION = "No internet connection!"
@@ -29,7 +32,7 @@ class RestaurantsRepository(context: Context) {
     /**
      * INSERT RESTAURANT TO FAVORITES
      */
-    suspend fun insertFavoriteRestaurant(favorite: Favorite) {
+    suspend fun insertFavoriteRestaurant(favorite: Favorite?) {
         withContext(Dispatchers.IO) {
             favoriteDao.insertFavoriteRestaurant(favorite)
         }
@@ -45,9 +48,18 @@ class RestaurantsRepository(context: Context) {
     }
 
     /**
+     * UPDATE RESTAURANT
+     */
+    suspend fun updateRestaurant(restaurant: Restaurant) {
+        withContext(Dispatchers.IO) {
+            restaurantDao.updateRestaurant(restaurant)
+        }
+    }
+
+    /**
      * GET FAVORITE BY GOOGLE ID AND RESTAURANT ID
      */
-    suspend fun getFavoriteByUserGoogleIdAndRestaurantId(userGoogleId: String, restaurantId: Long): Favorite {
+    suspend fun getFavoriteByUserGoogleIdAndRestaurantId(userGoogleId: String, restaurantId: Int): Favorite {
         return withContext(Dispatchers.IO) {
             favoriteDao.getFavoriteByUserGoogleIdAndRestaurantId(userGoogleId, restaurantId)
         }
@@ -73,6 +85,8 @@ class RestaurantsRepository(context: Context) {
                 }
 
                 return@withContext restaurantDao.getAllRestaurantsAscByName()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
             } catch (e: UnknownHostException) {
                 throw UnknownHostException(NO_INTERNET_CONNECTION)
             }
@@ -82,7 +96,7 @@ class RestaurantsRepository(context: Context) {
     /**
      * GET RESTAURANT BY ID
      */
-    suspend fun getRestaurantByRestaurantId(restaurantId: Long): Restaurant {
+    suspend fun getRestaurantByRestaurantId(restaurantId: Int): Restaurant {
         return withContext(Dispatchers.IO) {
             restaurantDao.getRestaurantByRestaurantId(restaurantId)
         }
@@ -91,7 +105,7 @@ class RestaurantsRepository(context: Context) {
     /**
      * GET SCHEDULES BY RESTAURANT ID
      */
-    suspend fun getSchedulesByRestaurantId(restaurantId: Long): List<Schedule> {
+    suspend fun getSchedulesByRestaurantId(restaurantId: Int): List<Schedule> {
         return withContext(Dispatchers.IO) {
             scheduleDao.getSchedulesByRestaurantId(restaurantId)
         }
@@ -120,44 +134,52 @@ class RestaurantsRepository(context: Context) {
      */
     private suspend fun loadRestaurantDataFromWeb() {
         return withContext(Dispatchers.IO) {
-            val days =
-                client.getAllDaysAsync().await().body() ?: throw UnknownHostException(NO_INTERNET_CONNECTION)
-            val restaurants =
-                client.getAllRestaurantsAsync().await().body() ?: throw UnknownHostException(NO_INTERNET_CONNECTION)
-            val schedules =
-                client.getAllSchedulesAsync().await().body() ?: throw UnknownHostException(NO_INTERNET_CONNECTION)
+            try {
+                val days =
+                    client.getAllDaysAsync().await().body()
+                val restaurants =
+                    client.getAllRestaurantsAsync().await().body()
+                val schedules =
+                    client.getAllSchedulesAsync().await().body()
 
-            for (day in days) {
-                insertDay(day = Day(day.idDay, day.name))
-            }
+                for (day in days!!) {
+                    insertDay(day = Day(day.idDay, day.name))
+                }
 
-            for (restaurant in restaurants) {
-                insertRestaurant(
-                    restaurant = Restaurant(
-                        restaurant.idRestaurant,
-                        restaurant.name,
-                        restaurant.description,
-                        restaurant.photoUrl,
-                        restaurant.address,
-                        restaurant.latitude,
-                        restaurant.longitude,
-                        restaurant.currentRating,
-                        restaurant.type
+                for (restaurant in restaurants!!) {
+                    insertRestaurant(
+                        restaurant = Restaurant(
+                            restaurant.idRestaurant,
+                            restaurant.name,
+                            restaurant.description,
+                            restaurant.photoUrl,
+                            restaurant.address,
+                            restaurant.latitude,
+                            restaurant.longitude,
+                            restaurant.currentRating,
+                            restaurant.type
+                        )
                     )
-                )
-            }
+                }
 
-            for (schedule in schedules) {
-                insertSchedule(
-                    schedule = Schedule(
-                        schedule.idSchedule,
-                        schedule.orderBy,
-                        schedule.startTime,
-                        schedule.endTime,
-                        schedule.restaurant?.idRestaurant,
-                        schedule.day?.idDay
+                for (schedule in schedules!!) {
+                    insertSchedule(
+                        schedule = Schedule(
+                            schedule.idSchedule,
+                            schedule.orderBy,
+                            schedule.startTime,
+                            schedule.endTime,
+                            schedule.restaurant?.idRestaurant,
+                            schedule.day?.idDay
+                        )
                     )
-                )
+                }
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
             }
         }
     }
@@ -188,9 +210,15 @@ class RestaurantsRepository(context: Context) {
      */
     suspend fun getUserByUserGoogleId(userGoogleId: String): UserJacksonModel? {
         return withContext(Dispatchers.IO) {
-            client.getUserByUserGoogleIdAsync(userGoogleId).await().body() ?: throw UnknownHostException(
-                NO_INTERNET_CONNECTION
-            )
+            try {
+                client.getUserByUserGoogleIdAsync(userGoogleId).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
@@ -199,18 +227,32 @@ class RestaurantsRepository(context: Context) {
      */
     suspend fun getUserByEmail(email: String): UserJacksonModel? {
         return withContext(Dispatchers.IO) {
-            client.getUserByEmailAsync(email).await().body() ?: throw UnknownHostException(NO_INTERNET_CONNECTION)
+            try {
+                client.getUserByEmailAsync(email).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
     /**
      * CHECK IF USER EXISTS
      */
-    suspend fun getUserByEmailOrGoogleUserId(email: String, userGoogleId: String): Boolean {
+    suspend fun getUserByEmailOrGoogleUserId(email: String, userGoogleId: String): Boolean? {
         return withContext(Dispatchers.IO) {
-            client.getUserByEmailOrGoogleUserId(email, userGoogleId).await().body() ?: throw UnknownHostException(
-                NO_INTERNET_CONNECTION
-            )
+            try {
+                client.getUserByEmailOrGoogleUserId(email, userGoogleId).await().body() ?: throw Exception()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
@@ -219,30 +261,49 @@ class RestaurantsRepository(context: Context) {
      */
     suspend fun insertUser(userJacksonModel: UserJacksonModel): UserJacksonModel? {
         return withContext(Dispatchers.IO) {
-            client.insertUserAsync(userJacksonModel).await().body()
-                ?: throw UnknownHostException(NO_INTERNET_CONNECTION)
+            try {
+                client.insertUserAsync(userJacksonModel).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
     /**
      * UPDATE USER (RETROFIT)
      */
-    suspend fun updateUser(userJacksonModel: UserJacksonModel, userId: Long): UserJacksonModel? {
+    suspend fun updateUser(userJacksonModel: UserJacksonModel, userId: Int): UserJacksonModel? {
         return withContext(Dispatchers.IO) {
-            client.updateUserAsync(userJacksonModel, userId).await().body() ?: throw UnknownHostException(
-                NO_INTERNET_CONNECTION
-            )
+            try {
+                client.updateUserAsync(userJacksonModel, userId).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
     /**
      * GET ALL RATINGS BY RESTAURANT ID
      */
-    suspend fun getRatingsByRestaurantId(restaurantId: Long): List<RatingJacksonModel>? {
+    suspend fun getRatingsByRestaurantId(restaurantId: Int): List<RatingJacksonModel>? {
         return withContext(Dispatchers.IO) {
-            client.getRatingsByRestaurantIdAsync(restaurantId).await().body() ?: throw UnknownHostException(
-                NO_INTERNET_CONNECTION
-            )
+            try {
+                client.getRatingsByRestaurantIdAsync(restaurantId).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
@@ -251,19 +312,53 @@ class RestaurantsRepository(context: Context) {
      */
     suspend fun getRatingsByUserGoogleId(googleUserId: String): List<RatingJacksonModel>? {
         return withContext(Dispatchers.IO) {
-            client.getRatingsByUserGoogleIdAsync(googleUserId).await().body() ?: throw UnknownHostException(
-                NO_INTERNET_CONNECTION
-            )
+            try {
+                client.getRatingsByUserGoogleIdAsync(googleUserId).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
     /**
+     * GET RATINGS BY GOOGLE USER ID AND RESTAURANT ID
+     */
+    suspend fun getRatingsByUserGoogleIdAndRestaurantId(
+        googleUserId: String,
+        restaurantId: Int
+    ): List<RatingJacksonModel>? {
+        return withContext(Dispatchers.IO) {
+            try {
+                client.getRatingsByUserGoogleIdAndRestaurantIdRestaurant(googleUserId, restaurantId).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
+        }
+    }
+
+
+    /**
      * CHECK IF USER HAS ALREADY RATED THE RESTAURANT
      */
-    suspend fun checkIfUserAlreadyRatedTheRestaurant(restaurantId: Long, userGoogleId: String): RatingJacksonModel? {
+    suspend fun checkIfUserAlreadyRatedTheRestaurant(restaurantId: Int, userGoogleId: String): RatingJacksonModel? {
         return withContext(Dispatchers.IO) {
-            client.checkIfUserAlreadyRatedTheRestaurantAsync(restaurantId, userGoogleId).await().body()
-                ?: throw UnknownHostException(NO_INTERNET_CONNECTION)
+            try {
+                client.checkIfUserAlreadyRatedTheRestaurantAsync(restaurantId, userGoogleId).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
@@ -272,20 +367,32 @@ class RestaurantsRepository(context: Context) {
      */
     suspend fun insertRating(ratingJacksonModel: RatingJacksonModel): RatingJacksonModel? {
         return withContext(Dispatchers.IO) {
-            client.insertRatingAsync(ratingJacksonModel).await().body() ?: throw UnknownHostException(
-                NO_INTERNET_CONNECTION
-            )
+            try {
+                client.insertRatingAsync(ratingJacksonModel).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
     /**
      * GET COMMENTS BY RESTAURANT ID
      */
-    suspend fun getCommentsByRestaurantId(restaurantId: Long): List<CommentJacksonModel>? {
+    suspend fun getCommentsByRestaurantId(restaurantId: Int): List<CommentJacksonModel>? {
         return withContext(Dispatchers.IO) {
-            client.getCommentsByRestaurantIdAsync(restaurantId).await().body() ?: throw UnknownHostException(
-                NO_INTERNET_CONNECTION
-            )
+            try {
+                client.getCommentsByRestaurantIdAsync(restaurantId).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
@@ -294,41 +401,66 @@ class RestaurantsRepository(context: Context) {
      */
     suspend fun getCommentsByUserGoogleId(googleUserId: String): List<CommentJacksonModel>? {
         return withContext(Dispatchers.IO) {
-            client.getCommentsByUserGoogleIdAsync(googleUserId).await().body() ?: throw UnknownHostException(
-                NO_INTERNET_CONNECTION
-            )
+            try {
+                client.getCommentsByUserGoogleIdAsync(googleUserId).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
-    //insertComment commentJacksonModel
     /**
      * INSERT COMMENT (RETROFIT)
      */
     suspend fun insertComment(commentJacksonModel: CommentJacksonModel): CommentJacksonModel? {
         return withContext(Dispatchers.IO) {
-            client.insertCommentAsync(commentJacksonModel).await().body() ?: throw UnknownHostException(
-                NO_INTERNET_CONNECTION
-            )
+            try {
+                client.insertCommentAsync(commentJacksonModel).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
     /**
      * UPDATE COMMENT (RETROFIT)
      */
-    suspend fun updateComment(commentJacksonModel: CommentJacksonModel, commentId: Long): CommentJacksonModel? {
+    suspend fun updateComment(commentJacksonModel: CommentJacksonModel, commentId: Int): CommentJacksonModel? {
         return withContext(Dispatchers.IO) {
-            client.updateCommentAsync(commentJacksonModel, commentId).await().body() ?: throw UnknownHostException(
-                NO_INTERNET_CONNECTION
-            )
+            try {
+                client.updateCommentAsync(commentJacksonModel, commentId).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 
     /**
      * DELETE COMMENT (RETROFIT)
      */
-    suspend fun deleteComment(commentId: Long): Boolean? {
+    suspend fun deleteComment(commentId: Int?): Boolean? {
         return withContext(Dispatchers.IO) {
-            client.deleteCommentAsync(commentId).await().body() ?: throw UnknownHostException(NO_INTERNET_CONNECTION)
+            try {
+                client.deleteCommentAsync(commentId).await().body()
+            } catch (e: ConnectException) {
+                throw ConnectException(NO_INTERNET_CONNECTION)
+            } catch (e: UnknownHostException) {
+                throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
+            }
         }
     }
 }

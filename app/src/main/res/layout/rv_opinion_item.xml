@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools" android:id="@+id/navigation_header_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <ImageView
+            android:id="@+id/opinionRestaurantImage"
+            android:layout_width="@dimen/activity_horizontal_margin_64"
+            android:layout_height="@dimen/activity_vertical_margin_64"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_16"
+            android:layout_marginTop="@dimen/activity_vertical_margin_16"
+            android:src="@drawable/ic_app"
+            tools:ignore="ContentDescription"/>
+
+    <TextView
+            android:id="@+id/opinionRestaurantName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/opinionRestaurantImage"
+            android:text="@string/restaurant_name"
+            android:textSize="18sp"
+            android:textColor="@color/colorBlack"
+            android:fontFamily="@font/montserrat_bold"
+            android:layout_marginTop="@dimen/activity_vertical_margin_16"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_16"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin_16"/>
+
+    <RatingBar
+            android:id="@+id/opinionRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/opinionRestaurantName"
+            android:layout_toEndOf="@id/opinionRestaurantImage"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin_16"
+            android:isIndicator="true"
+            android:numStars="5"
+            style="?android:attr/ratingBarStyleIndicator"
+            android:stepSize=".5"
+            android:theme="@style/RatingBar"/>
+
+    <TextView
+            android:id="@+id/opinionCommentText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/opinionRestaurantImage"
+            android:layout_below="@id/opinionRatingBar"
+            android:text="@string/comment_text"
+            android:textSize="18sp"
+            android:textColor="@color/colorBlack"
+            android:fontFamily="@font/montserrat_medium"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_16"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin_16"/>
+
+    <TextView
+            android:id="@+id/opinionCommentDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/opinionRestaurantImage"
+            android:layout_below="@id/opinionCommentText"
+            android:text="@string/comment_date"
+            android:textSize="13sp"
+            android:textColor="@color/colorGray"
+            android:fontFamily="@font/montserrat_medium"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_16"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin_16"/>
+
+    <ImageView
+            android:id="@+id/opinionRemoveComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin_16"
+            android:layout_above="@id/opinionHorizontalLine"
+            android:src="@drawable/ic_remove_circle_outline_red_24dp"
+            tools:ignore="ContentDescription"/>
+
+    <View
+            android:id="@+id/opinionHorizontalLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/opinionCommentDate"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_16"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin_16"
+            android:layout_marginTop="@dimen/activity_vertical_margin_16"
+            android:background="@color/colorLightGray"/>
+
+</RelativeLayout>
