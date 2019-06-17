@@ -89,6 +89,8 @@ class RestaurantsRepository(context: Context) {
                 throw ConnectException(NO_INTERNET_CONNECTION)
             } catch (e: UnknownHostException) {
                 throw UnknownHostException(NO_INTERNET_CONNECTION)
+            } catch (e: SocketTimeoutException) {
+                throw SocketTimeoutException(NO_INTERNET_CONNECTION)
             }
         }
     }
@@ -245,7 +247,7 @@ class RestaurantsRepository(context: Context) {
     suspend fun getUserByEmailOrGoogleUserId(email: String, userGoogleId: String): Boolean? {
         return withContext(Dispatchers.IO) {
             try {
-                client.getUserByEmailOrGoogleUserId(email, userGoogleId).await().body() ?: throw Exception()
+                client.getUserByEmailOrGoogleUserIdAsync(email, userGoogleId).await().body() ?: throw Exception()
             } catch (e: ConnectException) {
                 throw ConnectException(NO_INTERNET_CONNECTION)
             } catch (e: UnknownHostException) {
@@ -333,7 +335,7 @@ class RestaurantsRepository(context: Context) {
     ): List<RatingJacksonModel>? {
         return withContext(Dispatchers.IO) {
             try {
-                client.getRatingsByUserGoogleIdAndRestaurantIdRestaurant(googleUserId, restaurantId).await().body()
+                client.getRatingsByUserGoogleIdAndRestaurantIdRestaurantAsync(googleUserId, restaurantId).await().body()
             } catch (e: ConnectException) {
                 throw ConnectException(NO_INTERNET_CONNECTION)
             } catch (e: UnknownHostException) {
